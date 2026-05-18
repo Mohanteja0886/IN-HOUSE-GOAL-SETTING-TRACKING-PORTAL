@@ -1,61 +1,69 @@
-# ATOMQUEST HACKATHON 1.0 - SUBMISSION LEDGER
-## IN-HOUSE GOAL SETTING & TRACKING PORTAL
+# 🏆 ATOMQUEST HACKATHON 1.0 - OFFICIAL SUBMISSION LEDGER
+## IN-HOUSE GOAL SETTING & TRACKING PORTAL ("GoalStream")
 
 ---
 
 > [!IMPORTANT]
-> **Working Live Link:** `[INSERT DEPLOYED VERCEL/NETLIFY URL HERE]`  
-> **Source Code Repository:** `[INSERT GITHUB REPOSITORY URL HERE]`
+> **Live Deployed Portal (Vercel):** [https://in-house-goal-setting-tracking-portal.vercel.app/](https://in-house-goal-setting-tracking-portal.vercel.app/)  
+> **Source Code Repository (GitHub):** [https://github.com/Mohanteja0886/IN-HOUSE-GOAL-SETTING-TRACKING-PORTAL](https://github.com/Mohanteja0886/IN-HOUSE-GOAL-SETTING-TRACKING-PORTAL)
 
 ---
 
-## 1. Executive Summary & Tech Stack
+## 1. Executive Summary & Core Value Proposition
 
-This portal is a fully integrated, state-of-the-art **Goal Setting & Tracking Portal** engineered using **Next.js 15 (React 19)**, styled with vanilla **CSS variables** for modern design aesthetics, and powered by **Supabase Cloud (PostgreSQL & Go Auth)**.
+**GoalStream** is an enterprise-grade, high-performance **Goal Setting & Tracking Portal** built to solve alignment, accountability, and tracking bottlenecks. Combining the robustness of **Next.js 15 (React 19)** with **Supabase Cloud (PostgreSQL)**, GoalStream enforces strict mathematical constraints, automates complex approval cycles, and renders gorgeous, fluid analytics that look premium on both mobile and desktop viewports.
 
-### Core Architecture Capabilities
-*   **Next.js 15 App Router:** File-system based router with clean layout nesting, suspense fallbacks, and server/client page optimizations.
-*   **Supabase Client integration:** Real-time query handlers communicating directly with custom Postgres schemas, completely avoiding slow local mocks.
-*   **Strict Form Validations:** Blocks goals with $< 10\%$ weightage with dynamic visual feedback.
-*   **Multi-UoM Core Scoring Engine:** Dynamic progression formulas evaluating Min, Max, Timeline, and Zero-based metrics.
-*   **Shared Goal Bracketed Serializer:** Automatically links and propagates departmental goals without schema updates.
-*   **Interactive Check-in Ledger:** Visual Planned vs. Actual progress grid embedded directly within reviews.
-*   **CSV Exporter:** Zero-overhead client-side spreadsheet downloader compiling direct reports' performance ledger.
-*   **HR Heatgrid & Escalations:** Dynamically computed compliance heatmap and alert issuance controls.
+### 🌟 Distinct Architecture Capabilities
+
+*   **⚡ Next.js 15 App Router & React 19 Core:** Utilizes nested layout routing, client-side suspense fallbacks, and real-time state synchronization via custom Auth and Goal React Context layers.
+*   **🛠️ Direct Supabase Database Integration:** Completely removes slow, non-durable mock stubs. It reads and writes directly to custom PostgreSQL schema tables with transactional consistency.
+*   **📐 Strict Validation Engine:** Proactively enforces goal constraints on submission:
+    *   *Total target sheet weightage must equal exactly 100%*.
+    *   *Minimum weightage per individual goal is 10%*.
+    *   *Maximum of 8 goals per employee*.
+*   **🔒 Secure L1 Approval & Lock Workflow:** Allows managers to edit targets/weightages inline or return sheets for rework. On approval, the sheet is strictly locked and cannot be edited by the employee without Admin override.
+*   **🔗 Departmental Shared KPIs Sync:** Managers can push a shared departmental goal to all direct reportees. Recipients can only adjust the weightage; the title and planned target are strictly read-only and automatically sync achievement updates from the primary owner.
+*   **📊 Multi-UoM Core Scoring Engine:** Implements the four mathematical progression scoring models outlined in the BRD:
+    *   **Min (Numeric/%):** `Achievement ÷ Target` (e.g., Sales Revenue).
+    *   **Max (Numeric/%):** `Target ÷ Achievement` (e.g., Turnaround Time, Cost).
+    *   **Timeline:** Evaluates actual completion date vs. planned deadline.
+    *   **Zero-based:** Safe-gate indicator where `0` incidents = `100%`, any other number = `0%`.
+*   **📉 Interactive Cycle Achievement Trends:** Live-calculated team statistics with hover tooltips and dynamic SVG sparkline charts displaying team averages in real-time.
+*   **💼 Exportable Governance Center:** Downloadable direct-reports CSV matrix, real-time manager compliance trackers, and a color-coded secure system audit trail log.
 
 ---
 
 ## 2. Technical System Architecture
 
-Here is the structured architecture flow mapping frontend, state-management contexts, business validators, and the Supabase Postgres layer:
+Here is the modular architecture mapping the presentation layers, business validators, and the transactional database schema:
 
 ```mermaid
 graph TD
-    subgraph Client ["Client Presentation Layer (React 19)"]
-        A["Employee Console (New Goal / Achievements)"]
-        B["Manager Console (Roster / Approvals Page)"]
-        C["Admin Panel (Override Gates / Log Ledger)"]
-        D["Auth & Goal Context Providers"]
+    subgraph Client ["Client Presentation Layer (Next.js 15 / React 19)"]
+        A["Employee Console (Personal Goals & Check-ins)"]
+        B["Manager Dashboard (Direct Report Roster & KPI Push)"]
+        C["Admin Panel (Override Gates & System Controls)"]
+        D["Auth & Goal Context State Providers"]
     end
 
-    subgraph Logic ["Business Logic Engine"]
-        E["Multi-UoM Scoring (Min/Max/Timeline/Zero-based)"]
+    subgraph Logic ["Business Logic Core Engine"]
+        E["Multi-UoM Scoring Engine Formulas"]
         F["Shared Goal Serializer [SHARED_GOAL:parentUuid]"]
-        G["10% Minimum Weightage Validator"]
-        H["Client-side CSV Ledger Compiler"]
+        G["10% Min / 100% Cumulative Weightage Validator"]
+        H["Client-side CSV Matrix Compiler"]
     end
 
     subgraph Backend ["Supabase Cloud Platform"]
-        I["Supabase Auth (Role-based JWT Control)"]
-        J["PostgreSQL Database Engine"]
-        K["Audit Trails Operations Collection"]
+        I["Supabase Auth (Role-based JWT Gatekeepers)"]
+        J["PostgreSQL Database Transaction Engine"]
+        K["System Audit Trails Logger"]
     end
 
-    subgraph Data ["PostgreSQL Database Tables Schema"]
-        L[("users (Sarah, Michael, Manager, Admin)")]
-        M[("goals (Title, UoM, weight, achievements)")]
-        N[("cycles (submission periods)")]
-        O[("audit_logs (actor, action, timestamp)")]
+    subgraph Data [("PostgreSQL Database Schema")]
+        L[("users (Role Profiles)")]
+        M[("goals (Targets, UoM, Weightage, Status)")]
+        N[("achievements (Q1, Q2, Q3, Q4 Actuals)")]
+        O[("audit_logs (Actor, Action, Severity, Timestamp)")]
     end
 
     %% Flow links
@@ -77,10 +85,10 @@ graph TD
     J === N
     J === O
     
-    classDef clientStyle fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    classDef clientStyle fill:#e0f2f1,stroke:#004d40,stroke-width:2px;
     classDef logicStyle fill:#fff3e0,stroke:#e65100,stroke-width:2px;
     classDef backStyle fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
-    classDef dataStyle fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
+    classDef dataStyle fill:#e8eaf6,stroke:#1a237e,stroke-width:2px;
     
     class A,B,C,D clientStyle;
     class E,F,G,H logicStyle;
@@ -90,47 +98,44 @@ graph TD
 
 ---
 
-## 3. Deployment & Repository Push Guide
+## 3. Git Push & Deployment Blueprint
 
-### A. Push Code to GitHub
-To initialize, stage, and push your repository to your GitHub account, run the following commands in your PowerShell / Terminal:
+### A. Repository Origin Config (Git Push Log)
+The repository was initialized and pushed to GitHub main branch using:
 
-```powershell
-# 1. Initialize Git in project directory
-git init
+```bash
+# 1. Add remote origin configurations
+git remote add origin https://github.com/Mohanteja0886/IN-HOUSE-GOAL-SETTING-TRACKING-PORTAL.git
 
-# 2. Add files and make initial commit
+# 2. Stage and commit files
 git add .
-git commit -m "Feat: Complete Goal Setting & Tracking Portal with Supabase integration"
+git commit -m "feat: complete end-to-end GoalStream portal with live Supabase postgres bindings"
 
-# 3. Create main branch and link to your GitHub repository
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-
-# 4. Push to remote origin
+# 3. Push securely to GitHub main branch
 git push -u origin main
 ```
 
-### B. Deployed Live URL (Vercel)
-This Next.js 15 project is ready for one-click deployment on **Vercel**:
-1. Connect your GitHub account to [Vercel](https://vercel.com).
-2. Click **"Add New Project"** and import `Tracking portal`.
-3. Add the following **Environment Variables** (from your `.env.local` file):
+### B. Vercel Serverless Hosting Config
+1. Connected the `Mohanteja0886/IN-HOUSE-GOAL-SETTING-TRACKING-PORTAL` repository to Vercel.
+2. Initialized environment variables inside the dashboard:
    *   `NEXT_PUBLIC_SUPABASE_URL`
    *   `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-4. Click **Deploy**. Vercel will build the optimized production pages and supply a live working link!
+3. Executed the serverless Next.js builder, creating static and dynamic API nodes successfully with zero errors.
 
 ---
 
-## 4. Judges Testing & Login Credentials Checklist
+## 4. Judges Testing Checklist & Seeded Credentials
 
-For review and evaluation, the custom Supabase PostgreSQL database has been seeded with the following profile credentials (all passwords are set to `password123`):
+For absolute evaluation ease, the PostgreSQL database is pre-seeded with the following credentials (all profiles use the same password `password123`):
 
-| Role | Username / Email | Password | Core Features to Audit |
+| Role | Username / Email | Password | Core Features to Evaluate |
 | :--- | :--- | :--- | :--- |
-| **Employee 1** | `sarah@atomquest.com` | `password123` | Goal configuration under strict $10\%$ weight checks, trajectory updates, log achievements, read-only shared goals |
-| **Employee 2** | `michael@atomquest.com` | `password123` | Separate target tracking, UoM conversions (Max TAT metrics) |
-| **L1 Manager** | `manager@atomquest.com` | `password123` | Push Departmental KPI Goal to roster, real-time CSV Ledger download, inline comments discussion, lock objectives |
-| **HR Admin** | `admin@atomquest.com` | `password123` | Deploy new cycles, unlock goal sheets override gate, review audit operations trail, check HR matrix heatgrid |
+| 🧑‍💻 **Employee 1** | `sarah@atomquest.com` | `password123` | Draft and configure goals under strict validation, view read-only titles for departmental shared goals, input quarterly check-in achievements. |
+| 🧑‍💻 **Employee 2** | `michael@atomquest.com` | `password123` | Log Max Turnaround Time (TAT) metrics, submit completed goal sheets for review. |
+| 👑 **L1 Manager** | `manager@atomquest.com` | `password123` | Push departmental goal templates to reportees, adjust targets/weightages inline, approve and lock goal sheets, view live SVG charts, export CSV reports. |
+| 🛡️ **HR Admin** | `admin@atomquest.com` | `password123` | Configure new goal cycles, override gate controls to unlock goal sheets, review system-wide audit logs, monitor completion heatmaps. |
 
 ---
+
+> [!TIP]
+> **Navigation Shortcut:** Utilize the premium sidebar navigation drawer (featuring notifications and inbox FAQ helpers) to switch contexts easily and experience the end-to-end workflow!
