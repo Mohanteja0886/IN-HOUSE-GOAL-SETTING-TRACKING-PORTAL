@@ -115,13 +115,17 @@ export function Sidebar() {
           </div>
         )}
 
-        <button 
-          onClick={() => showNotification('Performance Reports')}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-secondary hover:bg-surface-container-high transition-all text-sm text-left w-full"
+        <Link 
+          href="/reports"
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 text-sm ${
+            isRouteActive('/reports') 
+              ? 'bg-secondary-container text-on-secondary-container font-bold' 
+              : 'text-secondary hover:bg-surface-container-high'
+          }`}
         >
           <span className="material-symbols-outlined">analytics</span>
           <span>Reports</span>
-        </button>
+        </Link>
 
         <Link 
           href="/settings"
