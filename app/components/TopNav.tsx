@@ -132,7 +132,7 @@ export function TopNav() {
             <span className="material-symbols-outlined text-[24px]">menu</span>
           </button>
 
-          <Link href="/" className="font-headline-md font-black text-primary hover:opacity-90 transition-opacity">
+          <Link href="/" className="text-2xl md:text-3xl font-black text-primary tracking-tight hover:opacity-90 transition-opacity">
             GoalStream
           </Link>
           
