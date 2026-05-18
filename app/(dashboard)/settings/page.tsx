@@ -98,7 +98,7 @@ export default function SettingsPage() {
 
   if (!user) {
     return (
-      <div className="md:pl-64 pt-24 min-h-screen max-w-full overflow-x-hidden flex items-center justify-center bg-background">
+      <div className="md:pl-64 pt-24 min-h-screen w-full flex items-center justify-center bg-background">
         <div className="text-center">
           <p className="text-sm font-semibold text-outline">Awaiting authentication authorization...</p>
         </div>
@@ -109,7 +109,7 @@ export default function SettingsPage() {
   const isAdmin = user.role === 'Admin' || user.role === 'Manager';
 
   return (
-    <main className="md:pl-64 pt-24 pb-8 min-h-screen max-w-full overflow-x-hidden flex-grow relative">
+    <main className="md:pl-64 pt-24 pb-8 min-h-screen flex-grow relative">
       
       {/* Toast Notification */}
       {toastMessage && (

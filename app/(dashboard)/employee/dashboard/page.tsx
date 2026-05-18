@@ -27,7 +27,7 @@ export default function EmployeeDashboard() {
 
   if (authLoading || goalsLoading) {
     return (
-      <div className="md:pl-64 pt-24 min-h-screen max-w-full overflow-x-hidden flex items-center justify-center bg-background">
+      <div className="md:pl-64 pt-24 min-h-screen w-full flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
           <p className="text-xs font-bold text-primary tracking-wide">Synchronizing live portal data...</p>
@@ -98,7 +98,7 @@ export default function EmployeeDashboard() {
 
 
   return (
-    <main className="md:pl-64 pt-24 pb-8 min-h-screen max-w-full overflow-x-hidden flex-grow">
+    <main className="md:pl-64 pt-24 pb-8 min-h-screen flex-grow">
       <div className="p-6 md:p-8 max-w-[1280px] mx-auto flex flex-col gap-6">
         
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">

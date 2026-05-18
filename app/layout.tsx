@@ -31,7 +31,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/icon?family=Material+Icons" 
         />
       </head>
-      <body className="bg-background min-h-screen text-on-surface antialiased" suppressHydrationWarning>
+      <body className="bg-background min-h-screen text-on-surface antialiased overflow-x-hidden" suppressHydrationWarning>
         <AuthProvider>
           <GoalProvider>
             {children}

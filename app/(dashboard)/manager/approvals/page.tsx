@@ -32,7 +32,7 @@ function ApprovalsContent() {
 
   if (authLoading || goalsLoading) {
     return (
-      <div className="md:pl-64 pt-24 min-h-screen max-w-full overflow-x-hidden flex items-center justify-center bg-background">
+      <div className="md:pl-64 pt-24 min-h-screen w-full flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
           <p className="text-xs font-bold text-primary tracking-wide">Syncing goal sheets...</p>
@@ -81,7 +81,7 @@ function ApprovalsContent() {
 
 
   return (
-    <main className="md:pl-64 pt-24 pb-8 px-4 md:px-8 min-h-screen max-w-full overflow-x-hidden flex-grow">
+    <main className="md:pl-64 pt-24 pb-8 px-4 md:px-8 min-h-screen flex-grow">
       <div className="max-w-[1280px] mx-auto p-6 md:p-8 pb-24 flex flex-col gap-6">
         {/* Banner Card */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 bg-surface-container-lowest p-6 border border-outline-variant rounded-2xl shadow-sm">
