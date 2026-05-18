@@ -39,61 +39,60 @@ Here is the modular architecture mapping the presentation layers, business valid
 
 ```mermaid
 graph TD
-    subgraph Client ["Client Presentation Layer (Next.js 15 / React 19)"]
-        A["Employee Console (Personal Goals & Check-ins)"]
-        B["Manager Dashboard (Direct Report Roster & KPI Push)"]
-        C["Admin Panel (Override Gates & System Controls)"]
-        D["Auth & Goal Context State Providers"]
+    %% Presentation Layer
+    subgraph UI ["1. Presentation Layer (Next.js 15)"]
+        EMP["Employee Portal (Draft, Submit, Check-in)"]
+        MGR["Manager Portal (Team Roster, Approve, Lock)"]
+        ADM["Admin Portal (Cycle Setup, Unlock Gates)"]
     end
 
-    subgraph Logic ["Business Logic Core Engine"]
-        E["Multi-UoM Scoring Engine Formulas"]
-        F["Shared Goal Serializer [SHARED_GOAL:parentUuid]"]
-        G["10% Min / 100% Cumulative Weightage Validator"]
-        H["Client-side CSV Matrix Compiler"]
+    %% State & Context Layer
+    subgraph State ["2. State & Context Layer (React 19)"]
+        CTX["Auth & Goal Context Providers"]
     end
 
-    subgraph Backend ["Supabase Cloud Platform"]
-        I["Supabase Auth (Role-based JWT Gatekeepers)"]
-        J["PostgreSQL Database Transaction Engine"]
-        K["System Audit Trails Logger"]
+    %% Business Logic
+    subgraph Core ["3. Business Logic Engine"]
+        VAL["Validation Gate (Min 10% / Max 8 / Sum 100%)"]
+        UOM["Scoring Formulas (Min/Max/Timeline/Zero)"]
+        SHR["Departmental KPI Synchronizer"]
+        CSV["Client-side CSV Ledger Exporter"]
     end
 
-    subgraph Data ["PostgreSQL Database Schema"]
-        L["users (Role Profiles)"]
-        M["goals (Targets, UoM, Weightage, Status)"]
-        N["achievements (Q1, Q2, Q3, Q4 Actuals)"]
-        O["audit_logs (Actor, Action, Severity, Timestamp)"]
+    %% Supabase Backend
+    subgraph DB ["4. Supabase Cloud (PostgreSQL)"]
+        AUTH["Supabase JWT Auth Gate"]
+        TBL_USR[("users table")]
+        TBL_GOL[("goals table")]
+        TBL_ACH[("achievements table")]
+        TBL_AUD[("audit_logs table")]
     end
 
-    %% Flow links
-    A --> D
-    B --> D
-    C --> D
-    
-    D --> E
-    D --> F
-    D --> G
-    B --> H
-    
-    D <--> I
-    D <--> J
-    J <--> K
-    
-    J === L
-    J === M
-    J === N
-    J === O
-    
-    classDef clientStyle fill:#e0f2f1,stroke:#004d40,stroke-width:2px;
-    classDef logicStyle fill:#fff3e0,stroke:#e65100,stroke-width:2px;
-    classDef backStyle fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
-    classDef dataStyle fill:#e8eaf6,stroke:#1a237e,stroke-width:2px;
-    
-    class A,B,C,D clientStyle;
-    class E,F,G,H logicStyle;
-    class I,J,K backStyle;
-    class L,M,N,O dataStyle;
+    %% Clean Vertical Flow Links
+    EMP --> CTX
+    MGR --> CTX
+    ADM --> CTX
+
+    CTX --> VAL
+    CTX --> UOM
+    CTX --> SHR
+    CTX --> CSV
+
+    VAL --> AUTH
+    UOM --> AUTH
+    SHR --> AUTH
+    CSV --> AUTH
+
+    AUTH --> TBL_USR
+    AUTH --> TBL_GOL
+    AUTH --> TBL_ACH
+    AUTH --> TBL_AUD
+
+    %% Custom Subgraph Styling for Premium Visuals
+    style UI fill:#e0f2f1,stroke:#004d40,stroke-width:2px
+    style State fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style Core fill:#e8eaf6,stroke:#1a237e,stroke-width:2px
+    style DB fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
 ```
 
 ---
