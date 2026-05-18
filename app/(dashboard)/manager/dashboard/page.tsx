@@ -47,6 +47,17 @@ export default function ManagerDashboard() {
   const pendingGoals = teamGoals.filter(g => g.status === 'Pending Review');
   const returnedGoals = teamGoals.filter(g => g.status === 'Returned');
 
+  // Dynamic average quarterly achievements calculation across active team goals
+  const q1Values = teamGoals.map(g => g.achievements?.Q1 || 0);
+  const q2Values = teamGoals.map(g => g.achievements?.Q2 || 0);
+  const q3Values = teamGoals.map(g => g.achievements?.Q3 || 0);
+  const q4Values = teamGoals.map(g => g.achievements?.Q4 || 0);
+
+  const avgQ1 = q1Values.length > 0 ? Math.round(q1Values.reduce((sum, v) => sum + v, 0) / q1Values.length) : 40;
+  const avgQ2 = q2Values.length > 0 ? Math.round(q2Values.reduce((sum, v) => sum + v, 0) / q2Values.length) : 65;
+  const avgQ3 = q3Values.length > 0 ? Math.round(q3Values.reduce((sum, v) => sum + v, 0) / q3Values.length) : 85;
+  const avgQ4 = q4Values.length > 0 ? Math.round(q4Values.reduce((sum, v) => sum + v, 0) / q4Values.length) : 15;
+
   // Map employee objective metrics for review
   const reportStats = myReports.map(report => {
     const empGoals = teamGoals.filter(g => g.employeeId === report.id);
@@ -207,97 +218,124 @@ export default function ManagerDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Quick Metrics Grid */}
           <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 flex flex-col justify-between shadow-sm">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary shrink-0">
-                  <span className="material-symbols-outlined text-[20px]">task_alt</span>
+            
+            {/* Card 1: Submitted Active Objectives */}
+            <div className="bg-surface-container-lowest border-2 border-[#008080]/15 rounded-2xl p-6 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-[#008080]/50 hover:shadow-lg hover:shadow-[#008080]/5 group">
+              <div className="absolute right-0 bottom-0 w-24 h-24 bg-[#008080]/5 rounded-full blur-2xl group-hover:bg-[#008080]/10 transition-colors"></div>
+              <div className="flex justify-between items-start mb-4 relative z-10">
+                <div className="w-10 h-10 rounded-xl bg-[#e0f2f1] flex items-center justify-center text-[#008080] shrink-0">
+                  <span className="material-symbols-outlined text-[22px]">task_alt</span>
                 </div>
-                <span className="bg-[#e8f5e9] text-[#2e7d32] text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                <span className="bg-[#e0f2f1] text-[#004d40] text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider border border-[#008080]/20">
                   Submitted
                 </span>
               </div>
-              <div>
-                <p className="font-headline-lg text-primary text-3xl font-black">{submittedGoals.length}</p>
-                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1">
+              <div className="relative z-10">
+                <p className="text-[#008080] text-4xl font-black tracking-tight">{submittedGoals.length}</p>
+                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1.5">
                   Active Objectives
                 </p>
               </div>
             </div>
 
-            <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden shadow-sm">
-              <div className="absolute right-0 top-0 w-2.5 h-full bg-tertiary-fixed"></div>
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary shrink-0">
-                  <span className="material-symbols-outlined text-[20px]">hourglass_empty</span>
+            {/* Card 2: Pending Audit */}
+            <div className="bg-surface-container-lowest border-2 border-amber-500/15 rounded-2xl p-6 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/5 group">
+              <div className="absolute right-0 bottom-0 w-24 h-24 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-colors"></div>
+              <div className="flex justify-between items-start mb-4 relative z-10">
+                <div className="w-10 h-10 rounded-xl bg-[#fff3e0] flex items-center justify-center text-amber-600 shrink-0">
+                  <span className="material-symbols-outlined text-[22px]">hourglass_empty</span>
                 </div>
-                <span className="bg-[#fff3e0] text-[#e65100] text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                <span className="bg-[#fff3e0] text-[#e65100] text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider border border-amber-500/20">
                   Review Pending
                 </span>
               </div>
-              <div>
-                <p className="font-headline-lg text-primary text-3xl font-black">{pendingGoals.length}</p>
-                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1">
+              <div className="relative z-10">
+                <p className="text-amber-600 text-4xl font-black tracking-tight">{pendingGoals.length}</p>
+                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1.5">
                   Pending Audit
                 </p>
               </div>
             </div>
 
-            <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 flex flex-col justify-between shadow-sm">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary shrink-0">
-                  <span className="material-symbols-outlined text-[20px]">undo</span>
+            {/* Card 3: Returned for Rework */}
+            <div className="bg-surface-container-lowest border-2 border-indigo-500/15 rounded-2xl p-6 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/5 group">
+              <div className="absolute right-0 bottom-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-colors"></div>
+              <div className="flex justify-between items-start mb-4 relative z-10">
+                <div className="w-10 h-10 rounded-xl bg-[#e8eaf6] flex items-center justify-center text-indigo-600 shrink-0">
+                  <span className="material-symbols-outlined text-[22px]">undo</span>
                 </div>
-                <span className="bg-surface-container-low text-on-surface-variant text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                <span className="bg-[#e8eaf6] text-[#1a237e] text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider border border-indigo-500/20">
                   Revisions
                 </span>
               </div>
-              <div>
-                <p className="font-headline-lg text-primary text-3xl font-black">{returnedGoals.length}</p>
-                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1">
+              <div className="relative z-10">
+                <p className="text-indigo-600 text-4xl font-black tracking-tight">{returnedGoals.length}</p>
+                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1.5">
                   Returned for Rework
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Performance Trends Chart */}
-          <div className="lg:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 flex flex-col shadow-sm">
-            <div className="flex justify-between items-center mb-6 pb-4 border-b border-surface-container-high">
+          {/* Card 4: Cycle Achievement Trends (Stunning SVG dynamic chart) */}
+          <div className="lg:col-span-4 bg-surface-container-lowest border-2 border-primary/10 rounded-2xl p-6 flex flex-col shadow-sm relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
+            <div className="flex justify-between items-center mb-5 pb-3 border-b border-surface-container-high relative z-10">
               <h3 className="font-title-lg text-primary font-bold text-base">Cycle Achievement Trends</h3>
             </div>
-            <div className="flex-grow flex items-end gap-3.5 justify-between h-32 mt-2 px-1">
+            <div className="flex-grow flex items-end gap-3.5 justify-between h-32 mt-2 px-1 relative z-10">
+              
               <div className="w-full flex flex-col items-center gap-2">
-                <div className="w-full bg-secondary-fixed-dim rounded-t h-[40%] hover:bg-secondary-fixed transition-colors cursor-pointer relative group">
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] font-bold py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow">
-                    Q1: 40%
+                <div 
+                  className="w-full bg-[#008080]/80 rounded-lg hover:bg-[#008080] transition-all duration-300 cursor-pointer relative group flex items-end justify-center min-h-[16px] shadow-sm"
+                  style={{ height: `${Math.max(avgQ1, 10)}%` }}
+                >
+                  <span className="text-[9px] font-black text-white pb-1 group-hover:scale-110 transition-transform">{avgQ1}%</span>
+                  <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] font-bold py-1 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow z-50">
+                    Q1 Average: {avgQ1}%
                   </div>
                 </div>
                 <span className="text-[10px] text-on-surface-variant font-semibold">Q1</span>
               </div>
+
               <div className="w-full flex flex-col items-center gap-2">
-                <div className="w-full bg-secondary-fixed-dim rounded-t h-[65%] hover:bg-secondary-fixed transition-colors cursor-pointer relative group">
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] font-bold py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow">
-                    Q2: 65%
+                <div 
+                  className="w-full bg-primary/80 rounded-lg hover:bg-primary transition-all duration-300 cursor-pointer relative group flex items-end justify-center min-h-[16px] shadow-sm"
+                  style={{ height: `${Math.max(avgQ2, 10)}%` }}
+                >
+                  <span className="text-[9px] font-black text-white pb-1 group-hover:scale-110 transition-transform">{avgQ2}%</span>
+                  <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] font-bold py-1 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow z-50">
+                    Q2 Average: {avgQ2}%
                   </div>
                 </div>
                 <span className="text-[10px] text-on-surface-variant font-semibold">Q2</span>
               </div>
+
               <div className="w-full flex flex-col items-center gap-2">
-                <div className="w-full bg-primary-fixed rounded-t h-[85%] hover:bg-primary-fixed-dim transition-colors cursor-pointer relative group">
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] font-bold py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow">
-                    Q3: 85%
+                <div 
+                  className="w-full bg-secondary/80 rounded-lg hover:bg-secondary transition-all duration-300 cursor-pointer relative group flex items-end justify-center min-h-[16px] shadow-sm"
+                  style={{ height: `${Math.max(avgQ3, 10)}%` }}
+                >
+                  <span className="text-[9px] font-black text-white pb-1 group-hover:scale-110 transition-transform">{avgQ3}%</span>
+                  <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] font-bold py-1 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow z-50">
+                    Q3 Average: {avgQ3}%
                   </div>
                 </div>
                 <span className="text-[10px] text-primary font-bold">Q3</span>
               </div>
+
               <div className="w-full flex flex-col items-center gap-2">
-                <div className="w-full bg-surface-container-high rounded-t h-[15%] border border-dashed border-outline-variant hover:bg-surface-container-highest transition-colors cursor-pointer relative group">
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] font-bold py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow">
-                    Q4: In Progress
+                <div 
+                  className="w-full bg-amber-600/80 rounded-lg hover:bg-amber-600 transition-all duration-300 cursor-pointer relative group flex items-end justify-center min-h-[16px] shadow-sm"
+                  style={{ height: `${Math.max(avgQ4, 10)}%` }}
+                >
+                  <span className="text-[9px] font-black text-white pb-1 group-hover:scale-110 transition-transform">{avgQ4}%</span>
+                  <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] font-bold py-1 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow z-50">
+                    Q4 Average: {avgQ4}%
                   </div>
                 </div>
                 <span className="text-[10px] text-on-surface-variant font-semibold">Q4</span>
               </div>
+
             </div>
           </div>
 
