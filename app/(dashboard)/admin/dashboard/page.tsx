@@ -50,7 +50,7 @@ export default function AdminDashboard() {
 
   if (authLoading || goalsLoading || cycleLoading) {
     return (
-      <div className="md:pl-64 pt-24 min-h-screen w-full flex items-center justify-center bg-background">
+      <div className="pl-4 pr-4 md:pl-72 md:pr-8 pt-24 min-h-screen w-full flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
           <p className="text-xs font-bold text-primary tracking-wide">Syncing administrative override panels...</p>
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
 
 
   return (
-    <main className="md:pl-64 pt-24 pb-8 px-4 md:px-8 min-h-screen flex-grow">
+    <main className="pl-4 pr-4 md:pl-72 md:pr-8 pt-24 pb-8 min-h-screen flex-grow">
       <div className="max-w-[1280px] mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div>

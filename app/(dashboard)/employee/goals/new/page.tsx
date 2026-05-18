@@ -115,7 +115,7 @@ export default function CreateGoals() {
 
 
   return (
-    <main className="md:pl-64 pt-24 pb-8 px-4 md:px-8 min-h-screen flex-grow">
+    <main className="pl-4 pr-4 md:pl-72 md:pr-8 pt-24 pb-8 min-h-screen flex-grow">
       <div className="max-w-[1000px] mx-auto p-6 md:p-8 pb-36">
         <div className="mb-8">
           <div className="flex items-center gap-1.5 text-on-surface-variant font-label-md mb-3 text-xs">
