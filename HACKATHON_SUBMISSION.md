@@ -59,11 +59,11 @@ graph TD
         K["System Audit Trails Logger"]
     end
 
-    subgraph Data [("PostgreSQL Database Schema")]
-        L[("users (Role Profiles)")]
-        M[("goals (Targets, UoM, Weightage, Status)")]
-        N[("achievements (Q1, Q2, Q3, Q4 Actuals)")]
-        O[("audit_logs (Actor, Action, Severity, Timestamp)")]
+    subgraph Data ["PostgreSQL Database Schema"]
+        L["users (Role Profiles)"]
+        M["goals (Targets, UoM, Weightage, Status)"]
+        N["achievements (Q1, Q2, Q3, Q4 Actuals)"]
+        O["audit_logs (Actor, Action, Severity, Timestamp)"]
     end
 
     %% Flow links
