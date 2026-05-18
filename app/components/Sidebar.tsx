@@ -66,7 +66,7 @@ export function Sidebar() {
         <Link 
           href={dashboardRoute}
           className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 text-sm ${
-            isRouteActive('/employee/dashboard') || isRouteActive('/manager/dashboard') || isRouteActive('/admin/dashboard')
+            isRouteActive(dashboardRoute)
               ? 'bg-secondary-container text-on-secondary-container font-bold' 
               : 'text-secondary hover:bg-surface-container-high'
           }`}
@@ -78,9 +78,9 @@ export function Sidebar() {
         </Link>
         
         <Link 
-          href={user.role === 'Employee' ? '/employee/dashboard' : '/manager/dashboard'}
+          href="/employee/dashboard"
           className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 text-sm ${
-            isRouteActive('/employee/dashboard#goals') 
+            isRouteActive('/employee/dashboard') 
               ? 'bg-secondary-container text-on-secondary-container font-bold' 
               : 'text-secondary hover:bg-surface-container-high'
           }`}

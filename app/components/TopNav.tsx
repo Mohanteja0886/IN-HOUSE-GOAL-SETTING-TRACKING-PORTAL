@@ -449,7 +449,7 @@ export function TopNav() {
               href={dashboardRoute}
               onClick={() => setMobileDrawerOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 text-sm ${
-                isRouteActive('/employee/dashboard') || isRouteActive('/manager/dashboard') || isRouteActive('/admin/dashboard')
+                isRouteActive(dashboardRoute)
                   ? 'bg-secondary-container text-on-secondary-container font-bold' 
                   : 'text-secondary hover:bg-surface-container-high'
               }`}
@@ -459,10 +459,10 @@ export function TopNav() {
             </Link>
 
             <Link 
-              href={user.role === 'Employee' ? '/employee/dashboard' : '/manager/dashboard'}
+              href="/employee/dashboard"
               onClick={() => setMobileDrawerOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 text-sm ${
-                isRouteActive('/employee/dashboard#goals') 
+                isRouteActive('/employee/dashboard') 
                   ? 'bg-secondary-container text-on-secondary-container font-bold' 
                   : 'text-secondary hover:bg-surface-container-high'
               }`}
