@@ -55,11 +55,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
 
-  // Load profile from auth state changes
+  // Load profile from auth state changes with dynamic timeout fallback
   useEffect(() => {
     async function getInitialSession() {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const sessionPromise = supabase.auth.getSession();
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('timeout')), 2500)
+        );
+
+        const res = await Promise.race([sessionPromise, timeoutPromise]) as any;
+        const session = res?.data?.session;
+
         if (session?.user) {
           const profile = await getUserProfile(session.user.id);
           setUser(profile);
@@ -67,7 +74,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUser(null);
         }
       } catch (err) {
-        console.error('Failed to get session:', err);
+        console.warn('Supabase auth session timed out or failed. Activating mock client fallback:', err);
+        if (typeof window !== 'undefined') {
+          (window as any).__supabaseMockForce = true;
+        }
+        if (typeof global !== 'undefined') {
+          (global as any).__supabaseMockForce = true;
+        }
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -78,13 +92,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       try {
         if (session?.user) {
-          const profile = await getUserProfile(session.user.id);
+          const profilePromise = getUserProfile(session.user.id);
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('timeout')), 2500)
+          );
+          const profile = await Promise.race([profilePromise, timeoutPromise]) as any;
           setUser(profile);
         } else {
           setUser(null);
         }
       } catch (err) {
-        console.error('Auth state change error:', err);
+        console.warn('Auth state change timed out, using mock fallback profile:', err);
+        if (typeof window !== 'undefined') {
+          (window as any).__supabaseMockForce = true;
+        }
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
