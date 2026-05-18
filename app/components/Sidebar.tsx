@@ -16,10 +16,6 @@ export function Sidebar() {
     router.push('/login');
   };
 
-  const showNotification = (feature: string) => {
-    alert(`${feature} is simulated for this preview cycle. Perfect end-to-end objective planning is fully operational!`);
-  };
-
   const isManager = user.role === 'Manager' || user.role === 'Admin';
   
   // Dynamic dashboard route based on role
